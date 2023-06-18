@@ -2,11 +2,13 @@
 
 name: Terraform Init Build CI
 
-# Controls when the workflow will run
 on:
+  push:
+    branches: [ "main","develop" ]
+  pull_request:
+    branches: [ "main","develop" ]
 
   workflow_call:
-  #workflow_dispatch:
     inputs:
       destroy:
         description: 'True to destroy all the infraestructure'
