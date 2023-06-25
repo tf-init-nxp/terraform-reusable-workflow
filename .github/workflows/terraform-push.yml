@@ -1,7 +1,12 @@
-name: 'Terraform Unit Tests'
+name: 'Terraform Push Task'
 
 on:
-  push:
+  workflow_call:
+    inputs:
+      terraform_version:
+        description: 'Terraform Version to be used'
+        required: yes
+        type: string
 
 jobs:
   terraform-unit-tests:
@@ -11,11 +16,13 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.5.3
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+      uses: hashicorp/setup-terraform@v2.0.3
+      with:
+        terraform_version: ${{ inputs.terraform_version }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -32,9 +39,12 @@ jobs:
     # Perform a security scan of the terraform code using checkov
     - name: Run Checkov action
       id: checkov
-      uses: bridgecrewio/checkov-action@master
+      uses: bridgecrewio/checkov-action@12.2401.0
       with: 
         framework: terraform
+        output_format: cli,sarif
+        #output_file_path: console,results.sarif
+        #download_external_modules: true
 
     # Upload results to GitHub Advanced Security
     - name: Upload SARIF file
