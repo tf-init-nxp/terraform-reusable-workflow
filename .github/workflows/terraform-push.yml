@@ -7,6 +7,10 @@ on:
         description: 'Terraform Version to be used'
         required: true
         type: string
+      destroy:
+        description: 'True to destroy all the infraestructure'
+        required: false
+        type: boolean
 
 jobs:
   terraform-unit-tests:
