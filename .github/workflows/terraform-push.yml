@@ -5,7 +5,7 @@ on:
     inputs:
       terraform_version:
         description: 'Terraform Version to be used'
-        required: yes
+        required: true
         type: string
 
 jobs:
