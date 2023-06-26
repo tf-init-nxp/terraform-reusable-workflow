@@ -9,6 +9,23 @@ on:
         type: string
 
 jobs:
+  
+  Checkout-Repo:
+    name: 'checkout repo'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/cache@v3.5.3
+      with:
+        path: ./
+        key: some-key
+        
+    - name: CheckingFiles 
+      shell: bash
+      run: |
+          ls -la 
+  
   terraform-format-security-validations:
     name: 'Terraform Format - Security Validations'
     runs-on: ubuntu-latest
