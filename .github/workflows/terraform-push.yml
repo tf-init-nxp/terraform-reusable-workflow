@@ -10,7 +10,7 @@ on:
 
 jobs:
   terraform-format-validations:
-    name: 'Terraform Format-Validations'
+    name: 'Format Validations'
     runs-on: ubuntu-latest
     
     steps:
@@ -38,7 +38,7 @@ jobs:
     
     
   terraform-security-checks:
-    name: 'Terraform Security Checks'
+    name: 'Security Checks'
     runs-on: ubuntu-latest
 
     steps:
