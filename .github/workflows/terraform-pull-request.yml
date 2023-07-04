@@ -12,9 +12,9 @@ on:
     #     required: false
     #     type: boolean
 env:
-  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-  ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
+  ARM_CLIENT_ID: '${{ secrets.AZURE_CLIENT_ID }}'
+  ARM_TENANT_ID: '${{ secrets.AZURE_TENANT_ID }}'
+  ARM_CLIENT_SECRET: '${{ secrets.AZURE_CLIENT_SECRET }}'
 
 jobs:
   terraform-pull-request:
@@ -71,6 +71,9 @@ jobs:
         [ -z "${{ env.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty"
         [ -z "${{ env.TF_CONTAINER_NAME_DEV }}" ] && echo "TF_CONTAINER_NAME_DEV Empty"
         [ -z "${{ env.ARM_CLIENT_ID }}" ] && echo "ARM_CLIENT_ID Empty"
+        
+        [ -z "${ARM_CLIENT_ID}" ] && echo "ARM_CLIENT_ID2 Empty" || echo "ARM_CLIENT_ID2 Full"
+        
         [ -z "${{ vars.TEST_SECRET }}" ] && echo "TEST_SECRET Empty" || "TEST_SECRET NOT empty"
         
       
