@@ -71,12 +71,10 @@ jobs:
         [ -z "${{ env.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty"
         [ -z "${{ env.TF_CONTAINER_NAME_DEV }}" ] && echo "TF_CONTAINER_NAME_DEV Empty"
         [ -z "${{ env.ARM_CLIENT_ID }}" ] && echo "ARM_CLIENT_ID Empty"
-        
         [ -z "${ARM_CLIENT_ID}" ] && echo "ARM_CLIENT_ID2 Empty" || echo "ARM_CLIENT_ID2 Full"
-        
         [ -z "${{ vars.TEST_SECRET }}" ] && echo "TEST_SECRET Empty" || "TEST_SECRET NOT empty"
-        
-      
+        [ -z "${{ vars.TEST_REPO_VAR }}" ] && echo "TEST_REPO_VAR Empty" || "TEST_REPO_VAR NOT empty"
+        [ -z "${{ env.TEST_REPO_VAR }}" ] && echo "TEST_REPO_VAR Empty" || "TEST_REPO_VAR NOT empty"
         
         
     # - name: Terraform Validate
