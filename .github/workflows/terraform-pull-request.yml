@@ -69,6 +69,8 @@ jobs:
       run: |
         echo "con env: ${{ env.TF_CONTAINER_NAME }}"
         echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_DEV }}"
+        echo "TF_STATE_SA_VARS=${{ vars.TF_STATE_SA_DEV }}"
+        echo "TF_STATE_SA_ENV=${{ env.TF_STATE_SA_DEV }}"
         
     # - name: Terraform Validate
     #   id: validate
