@@ -16,9 +16,9 @@ jobs:
   terraform-pull-request:
     name: 'Terraform Pull Request'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.tf_actions_working_dir }}
+#    defaults:
+#      run:
+#        working-directory: ${{ env.tf_actions_working_dir }}
 #    permissions:
 #      pull-requests: write
     steps:
