@@ -69,6 +69,7 @@ jobs:
       run: |
         echo ""
         [ -z "${{ env.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty"
+        [ -z "${{ vars.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME vars Empty" || echo "TF_CONTAINER_NAME NOT vars empty"
         [ -z "${{ vars.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty" || echo "TF_CONTAINER_NAME NOT empty"
         [ -z "${{ vars.TF_CONTAINER_NAME_DEV }}" ] && echo "TF_CONTAINER_NAME_DEV Empty" || echo "TF_CONTAINER_NAME_DEV NOT empty"
         [ -z "${{ env.ARM_CLIENT_ID }}" ] && echo "ARM_CLIENT_ID Empty"
