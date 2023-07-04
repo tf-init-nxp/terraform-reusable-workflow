@@ -58,7 +58,7 @@ jobs:
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_DEV }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
-            echo ${{ env.TF_CONTAINER_NAME_DEV }}
+            echo ${{ vars.TF_CONTAINER_NAME_DEV }}
         fi
       shell: bash
 
@@ -68,16 +68,8 @@ jobs:
       # terraform init -backend-config=storage_account_name=tfstatefile01 -backend-config=container_name=tfstate -backend-config=key=dev-network.terraform.tstate -backend-config=resource_group_name=DefaultResourceGroup-EUS -backend-config=subscription_id=2a04288a-8136-4880-b526-c6070e59f004 -backend-config=tenant_id=37d20c78-05e3-416d-83ab-cdbc21fed22a -backend-config=client_id=*** -backend-config=client_secret=***
       run: |
         echo ""
-        [ -z "${{ env.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty"
-        [ -z "${{ vars.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME vars Empty" || echo "TF_CONTAINER_NAME NOT vars empty"
-        [ -z "${{ vars.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty" || echo "TF_CONTAINER_NAME NOT empty"
         [ -z "${{ vars.TF_CONTAINER_NAME_DEV }}" ] && echo "TF_CONTAINER_NAME_DEV Empty" || echo "TF_CONTAINER_NAME_DEV NOT empty"
-        [ -z "${{ env.ARM_CLIENT_ID }}" ] && echo "ARM_CLIENT_ID Empty"
-        [ -z "${ARM_CLIENT_ID}" ] && echo "ARM_CLIENT_ID2 Empty" || echo "ARM_CLIENT_ID2 Full"
-        [ -z "${{ vars.TEST_SECRET }}" ] && echo "TEST_SECRET Empty" || "TEST_SECRET NOT empty"
-        [ -z "${{ vars.TEST_REPO_VAR }}" ] && echo "TEST_REPO_VAR Empty" || echo "TEST_REPO_VAR NOT empty"
-        [ -z "${{ env.TEST_REPO_VAR }}" ] && echo "TEST_REPO_VAR Empty" || echo "TEST_REPO_VAR NOT empty"
-        
+
         
     # - name: Terraform Validate
     #   id: validate
