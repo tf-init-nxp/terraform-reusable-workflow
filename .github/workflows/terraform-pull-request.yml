@@ -52,12 +52,12 @@ jobs:
             echo "working on Prod"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_PROD }}" >> $GITHUB_ENV
-            echo "TF_CONTAINER_NAME=${{ env.TF_CONTAINER_NAME_PROD }}" >> $GITHUB_ENV
+            echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_PROD }}" >> $GITHUB_ENV
         else
             echo "working on Dev"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_DEV }}" >> $GITHUB_ENV
-            echo "TF_CONTAINER_NAME=${{ env.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
+            echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
             echo ${{ env.TF_CONTAINER_NAME_DEV }}
         fi
       shell: bash
@@ -69,6 +69,7 @@ jobs:
       run: |
         echo ""
         [ -z "${{ env.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty"
+        [ -z "${{ vars.TF_CONTAINER_NAME }}" ] && echo "TF_CONTAINER_NAME Empty" || echo "TF_CONTAINER_NAME NOT empty"
         [ -z "${{ vars.TF_CONTAINER_NAME_DEV }}" ] && echo "TF_CONTAINER_NAME_DEV Empty" || echo "TF_CONTAINER_NAME_DEV NOT empty"
         [ -z "${{ env.ARM_CLIENT_ID }}" ] && echo "ARM_CLIENT_ID Empty"
         [ -z "${ARM_CLIENT_ID}" ] && echo "ARM_CLIENT_ID2 Empty" || echo "ARM_CLIENT_ID2 Full"
