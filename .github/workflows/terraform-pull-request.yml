@@ -47,15 +47,18 @@ jobs:
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_PROD }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ secrets.TF_CONTAINER_NAME_PROD }}" >> $GITHUB_ENV
+            echo "WORKING_ON=${BRANCH_NAME}" >> $GITHUB_ENV
 
         else
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_DEV }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ secrets.TF_CONTAINER_NAME_DEV }}" >> $GITHUB_ENV
+            echo "WORKING_ON=${BRANCH_NAME}" >> $GITHUB_ENV
         fi
-        echo "I am working on: ${BRANCH_NAME}"
+        echo "I am working on: ${WORKING_ON}"
         echo "Variables are: "
-        echo -e "\t${TF_CONTAINER_NAME}"
+        echo "${TF_CONTAINER_NAME}"
+        
       shell: bash
 
     - name: Terraform Init
