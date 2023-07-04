@@ -64,9 +64,8 @@ jobs:
       # terraform init -backend-config=storage_account_name=tfstatefile01 -backend-config=container_name=tfstate -backend-config=key=dev-network.terraform.tstate -backend-config=resource_group_name=DefaultResourceGroup-EUS -backend-config=subscription_id=2a04288a-8136-4880-b526-c6070e59f004 -backend-config=tenant_id=37d20c78-05e3-416d-83ab-cdbc21fed22a -backend-config=client_id=*** -backend-config=client_secret=***
       run: |
         echo $BRANCH_NAME
-        echo "I am working on: $WORKING_ON"
-        echo "Cantainer: $TF_CONTAINER_NAME"
-        echo "ContainerDEV: ${{ env.TF_CONTAINER_NAME_DEV }}"
+        echo $TF_CONTAINER_NAME
+        echo ${{ env.TF_CONTAINER_NAME_DEV }}
     # - name: Terraform Validate
     #   id: validate
     #   run: terraform validate -no-color
