@@ -43,7 +43,7 @@ jobs:
       run: |
         # Parse Azure secret into Terraform variables
         echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
-        if [ ${BRANCH_NAME} = "main" ]; then
+        if [ ${BRANCH_NAME} == "main" ]; then
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_PROD }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ secrets.TF_CONTAINER_NAME_PROD }}" >> $GITHUB_ENV
