@@ -38,12 +38,19 @@ jobs:
     #   id: fmt
     #   run: terraform fmt -check
     #   continue-on-error: true
+    - name: Getting Branch
+      id: gettingn_branch
+      run: |
+        echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
+        
     - name: Preparing Variables
       id: prepvars
       run: |
         # Parse Azure secret into Terraform variables
-        echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
-        if [ "${BRANCH_NAME}" = "main" ]; then
+        echo "Working on: ${{ env.BRANCH_NAME }}"
+        echo "Working on 2: ${BRANCH_NAME}"
+        
+        if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_PROD }}" >> $GITHUB_ENV
@@ -52,11 +59,9 @@ jobs:
             echo "working on Dev"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ secrets.TF_STATE_SA_DEV }}" >> $GITHUB_ENV
-            echo "TF_CONTAINER_NAME=${{ env.TF_CONTAINER_NAME_DEV }}" >> $GITHUB_ENV
+            echo "TF_CONTAINER_NAME=${{ env.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
             echo ${{ env.TF_CONTAINER_NAME_DEV }}
         fi
-
-        
       shell: bash
 
     - name: Terraform Init
@@ -64,9 +69,8 @@ jobs:
       #run: terraform init
       # terraform init -backend-config=storage_account_name=tfstatefile01 -backend-config=container_name=tfstate -backend-config=key=dev-network.terraform.tstate -backend-config=resource_group_name=DefaultResourceGroup-EUS -backend-config=subscription_id=2a04288a-8136-4880-b526-c6070e59f004 -backend-config=tenant_id=37d20c78-05e3-416d-83ab-cdbc21fed22a -backend-config=client_id=*** -backend-config=client_secret=***
       run: |
-        echo $TF_CONTAINER_NAME
-        echo ${BRANCH_NAME}
-        echo ${{ env.TF_CONTAINER_NAME_DEV }}
+        echo "${{ env.TF_CONTAINER_NAME }}"
+        echo "${{ env.TF_CONTAINER_NAME_DEV }}"
     # - name: Terraform Validate
     #   id: validate
     #   run: terraform validate -no-color
