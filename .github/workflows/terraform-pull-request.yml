@@ -39,20 +39,15 @@ jobs:
     #   run: terraform fmt -check
     #   continue-on-error: true
     - name: Getting Branch
-      id: gettingn_branch
+      id: getting_branch
       run: |
-        echo "VAR=Hello" >> "$GITHUB_ENV"
         echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
-        
         
     - name: Preparing Variables
       id: prepvars
       run: |
         # Parse Azure secret into Terraform variables
-        echo "Working on: ${{ env.BRANCH_NAME }}"
-        echo "Working on 2: ${BRANCH_NAME}"
-        echo "${{ env.VAR }}"
-        
+        echo "El Branch es: ${{ env.BRANCH_NAME }}"
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
