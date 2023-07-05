@@ -15,7 +15,7 @@ env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-  TEMP_SECRET: ${{ secrets.TEMP_SECRET }}
+  
   
 
 jobs:
@@ -25,6 +25,7 @@ jobs:
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
+      TEMP_SECRET: ${{ secrets.TEMP_SECRET }}
 #    defaults:
 #      run:
 #        working-directory: ${{ env.tf_actions_working_dir }}
@@ -63,12 +64,12 @@ jobs:
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
             echo "TF_RG_NAME=${{ vars.TF_STATE_RG_DEV }}" >> $GITHUB_ENV
         fi
-        if [ "jlk" ="${$TEMP_SECRET}" ];then
+        if [ "jlk" ="${TEMP_SECRET}" ];then
           echo "igual"
         else
           echo "No igual"
         fi
-        if [ -z ${$TEMP_SECRET} ];then
+        if [ -z ${TEMP_SECRET} ];then
           echo zero
         else
           echo nozero
