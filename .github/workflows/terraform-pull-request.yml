@@ -7,12 +7,12 @@ on:
         description: 'Terraform Version to be used'
         required: true
         type: string
-  permissions:
-    id-token: write 
-    contents: read
-    pull-requests: write
-    issues: write
 
+permissions:
+  id-token: write 
+  contents: read
+  pull-requests: write
+  issues: write
 
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
