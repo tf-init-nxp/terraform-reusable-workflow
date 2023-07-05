@@ -15,7 +15,7 @@ env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-  TF_KEY_STATE: ${GITHUB_REPOSITORY#*/}
+  
 
 jobs:
   terraform-pull-request:
@@ -43,6 +43,7 @@ jobs:
       id: getting_branch
       run: |
         echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
+        echo "TF_KEY_STATE=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         
     - name: Preparing Variables
       id: prepvars
@@ -80,7 +81,7 @@ jobs:
         
         terraform init -backend-config=storage_account_name=terraformstatedev0001 \
           -backend-config=container_name=tf-state-dev \
-          -backend-config=resource_group_name=${TF_KEY_STATE} \
+          -backend-config=resource_group_name=${{ env.TF_KEY_STATE }} \ 
           -backend-config=subscription_id=${{ vars.TEMP_SUBS_ID }} \
           -backend-config=tenant_id=${{ vars.TEMP_TENANT_ID }} \
           -backend-config=client_id=${{ vars.TEMP_CLIENT_ID }} \
