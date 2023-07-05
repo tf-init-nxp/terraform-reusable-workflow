@@ -15,6 +15,7 @@ env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  TEMP_SECRET: ${{ secrets.TEMP_SECRET }}
   
 
 jobs:
@@ -66,7 +67,7 @@ jobs:
       
     - uses: Azure/login@v1
       with:
-        creds: '{"clientId":"${{ vars.TEMP_CLIENT_ID }}","clientSecret":"${{ secrets.TEMP_SECRET }}","subscriptionId":"${{ vars.TEMP_SUBS_ID }}","tenantId":"${{ vars.TEMP_TENANT_ID }}"}'
+        creds: '{"clientId":"${{ vars.TEMP_CLIENT_ID }}","clientSecret":"$TEMP_SECRET","subscriptionId":"${{ vars.TEMP_SUBS_ID }}","tenantId":"${{ vars.TEMP_TENANT_ID }}"}'
 
     - name: Terraform Init
       id: init
@@ -80,7 +81,7 @@ jobs:
           -backend-config=subscription_id=${{ vars.TEMP_SUBS_ID }} \
           -backend-config=tenant_id=${{ vars.TEMP_TENANT_ID }} \
           -backend-config=client_id=${{ vars.TEMP_CLIENT_ID }} \
-          -backend-config=client_secret=${{ secrets.TEMP_SECRET }}
+          -backend-config=client_secret=$TEMP_SECRET
   
     # - name: Terraform Validate
     #   id: validate
