@@ -65,7 +65,7 @@ jobs:
       
     - uses: Azure/login@v1
       with:
-        creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ env.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+        creds: '{"clientId":"f95b2366-8d6b-4af3-970a-5fd9afaf9a01","clientSecret":"2T08Q~jCbdguyfwzh1dtQIzh2KbTMoIwjGQw8cic","subscriptionId":"9c5af5e1-c137-450c-8845-6465fa087443","tenantId":"ff0bb63a-9a7a-46de-aaea-b37b993f4a8e"}'
 
     - name: Terraform Init
       id: init
@@ -75,7 +75,13 @@ jobs:
         echo "TF_CONTAINER_NAME: ${{ env.TF_CONTAINER_NAME }}"
         echo "TF_STATE_SA: ${{ env.TF_STATE_SA }}"
         echo "TF_RG_NAME: ${{ env.TF_RG_NAME }}"
-        terraform init -backend-config=storage_account_name=terraformstatedev0001 -backend-config=container_name=tf-state-dev -backend-config=resource_group_name=terraform-state-dev -backend-config=subscription_id=9c5af5e1-c137-450c-8845-6465fa087443 -backend-config=tenant_id=ff0bb63a-9a7a-46de-aaea-b37b993f4a8e -backend-config=client_id=f95b2366-8d6b-4af3-970a-5fd9afaf9a01 -backend-config=client_secret=${{ secrets.AZURE_CLIENT_SECRET }}
+        terraform init -backend-config=storage_account_name=terraformstatedev0001 \
+          -backend-config=container_name=tf-state-dev \
+          -backend-config=resource_group_name=terraform-state-dev \
+          -backend-config=subscription_id=9c5af5e1-c137-450c-8845-6465fa087443 \
+          -backend-config=tenant_id=ff0bb63a-9a7a-46de-aaea-b37b993f4a8e \
+          -backend-config=client_id=f95b2366-8d6b-4af3-970a-5fd9afaf9a01 \
+          -backend-config=client_secret=${{ secrets.AZURE_CLIENT_SECRET }}
   
     # - name: Terraform Validate
     #   id: validate
