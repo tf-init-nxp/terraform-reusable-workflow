@@ -71,14 +71,8 @@ jobs:
         echo "TF_CONTAINER_NAME: ${{ env.TF_CONTAINER_NAME }}"
         echo "TF_STATE_SA: ${{ env.TF_STATE_SA }}"
         echo "TF_RG_NAME: ${{ env.TF_RG_NAME }}"
-        terraform init -backend-config=storage_account_name=${{ env.TF_STATE_SA }} \
-          -backend-config=container_name=${{ env.TF_CONTAINER_NAME }} -backend-config=key=terraform.tstate \
-          -backend-config=resource_group_name=${{ env.TF_RG_NAME }}
-          
-          #-backend-config=subscription_id=2a04288a-8136-4880-b526-c6070e59f004 \
-          #-backend-config=tenant_id=37d20c78-05e3-416d-83ab-cdbc21fed22a \
-          #-backend-config=client_id=*** \
-          #-backend-config=client_secret=***
+        terraform init -backend-config=storage_account_name=${{ env.TF_STATE_SA }} -backend-config=container_name=${{ env.TF_CONTAINER_NAME }} -backend-config=key=terraform.tstate -backend-config=resource_group_name=${{ env.TF_RG_NAME }} -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} -backend-config=tenant_id=${{ secrets.AZURE_TENANT_ID }} -backend-config=client_id=${{ secrets.AZURE_CLIENT_ID }} -backend-config=client_secret=${{ secrets.AZURE_CLIENT_SECRET }}
+  
         
     # - name: Terraform Validate
     #   id: validate
