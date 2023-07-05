@@ -71,7 +71,7 @@ jobs:
         echo "TF_CONTAINER_NAME: ${{ env.TF_CONTAINER_NAME }}"
         echo "TF_STATE_SA: ${{ env.TF_STATE_SA }}"
         echo "TF_RG_NAME: ${{ env.TF_RG_NAME }}"
-        terraform init -backend-config=storage_account_name=${{ env.TF_STATE_SA }} -backend-config=container_name=${{ env.TF_CONTAINER_NAME }} -backend-config=key=terraform.tstate -backend-config=resource_group_name=${{ env.TF_RG_NAME }} -backend-config=subscription_id=9c5af5e1-c137-450c-8845-6465fa087443 -backend-config=tenant_id=ff0bb63a-9a7a-46de-aaea-b37b993f4a8e -backend-config=client_id=f95b2366-8d6b-4af3-970a-5fd9afaf9a01 -backend-config=client_secret=xxxxxx-xxxxx
+        terraform init -backend-config=storage_account_name=terraformstatedev0001 -backend-config=container_name=tf-state-dev -backend-config=key=terraform.tstate -backend-config=resource_group_name=terraform-state-dev -backend-config=subscription_id=9c5af5e1-c137-450c-8845-6465fa087443 -backend-config=tenant_id=ff0bb63a-9a7a-46de-aaea-b37b993f4a8e -backend-config=client_id=f95b2366-8d6b-4af3-970a-5fd9afaf9a01 -backend-config=client_secret=xxxxxx-xxxxx
   
         
     # - name: Terraform Validate
