@@ -63,6 +63,16 @@ jobs:
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
             echo "TF_RG_NAME=${{ vars.TF_STATE_RG_DEV }}" >> $GITHUB_ENV
         fi
+        if [ "jlk" ="${$TEMP_SECRET}" ];then
+          echo "igual"
+        else
+          echo "No igual"
+        fi
+        if [ -z ${$TEMP_SECRET} ];then
+          echo zero
+        else
+          echo nozero
+        fi
       shell: bash
       
     - uses: Azure/login@v1
