@@ -78,8 +78,8 @@ jobs:
         echo "TF_STATE_SA: ${{ env.TF_STATE_SA }}"
         echo "TF_RG_NAME: ${{ env.TF_RG_NAME }}"
         echo "TF_KEY_STATE: ${{ env.TF_KEY_STATE }}"
-        terraform init -backend-config=storage_account_name=terraformstatedev0001 \
-          -backend-config=container_name=tf-state-dev \
+        terraform init -backend-config=storage_account_name=${{ env.TF_STATE_SA }} \
+          -backend-config=container_name=${{ env.TF_CONTAINER_NAME }} \
           -backend-config=resource_group_name=${{ env.TF_RG_NAME }} \
           -backend-config=key="${{ env.TF_KEY_STATE }}" \
           -backend-config=subscription_id=${{ vars.TEMP_SUBS_ID }} \
