@@ -65,7 +65,7 @@ jobs:
       
     - uses: Azure/login@v1
       with:
-        creds: '{"clientId":"f95b2366-8d6b-4af3-970a-5fd9afaf9a01","clientSecret":"2T08Q~jCbdguyfwzh1dtQIzh2KbTMoIwjGQw8cic","subscriptionId":"9c5af5e1-c137-450c-8845-6465fa087443","tenantId":"ff0bb63a-9a7a-46de-aaea-b37b993f4a8e"}'
+        creds: '{"clientId":"${{ vars.TEMP_CLIENT_ID }}","clientSecret":"${{ vars.TEMP_SECRET }}","subscriptionId":"${{ vars.TEMP_SUBS_ID }}","tenantId":"${{ vars.TEMP_TENANT_ID }}"}'
 
     - name: Terraform Init
       id: init
@@ -78,10 +78,10 @@ jobs:
         terraform init -backend-config=storage_account_name=terraformstatedev0001 \
           -backend-config=container_name=tf-state-dev \
           -backend-config=resource_group_name=terraform-state-dev \
-          -backend-config=subscription_id=9c5af5e1-c137-450c-8845-6465fa087443 \
-          -backend-config=tenant_id=ff0bb63a-9a7a-46de-aaea-b37b993f4a8e \
-          -backend-config=client_id=f95b2366-8d6b-4af3-970a-5fd9afaf9a01 \
-          -backend-config=client_secret=${{ secrets.AZURE_CLIENT_SECRET }}
+          -backend-config=subscription_id=${{ vars.TEMP_SUBS_ID }} \
+          -backend-config=tenant_id=${{ vars.TEMP_TENANT_ID }} \
+          -backend-config=client_id=${{ vars.TEMP_CLIENT_ID }} \
+          -backend-config=client_secret=${{ vars.TEMP_SECRET }}
   
     # - name: Terraform Validate
     #   id: validate
