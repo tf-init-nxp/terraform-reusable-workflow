@@ -64,12 +64,12 @@ jobs:
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
             echo "TF_RG_NAME=${{ vars.TF_STATE_RG_DEV }}" >> $GITHUB_ENV
         fi
-        if [ "jlk"="${TEMP_SECRET}" ];then
+        if [ "jlk"="${{ env.TEMP_SECRET }}" ];then
           echo "igual"
         else
           echo "No igual"
         fi
-        if [ -z ${TEMP_SECRET} ];then
+        if [ -z "${{ env.TEMP_SECRET }}" ];then
           echo zero
         else
           echo nozero
@@ -78,7 +78,7 @@ jobs:
       
     - uses: Azure/login@v1
       with:
-        creds: '{"clientId":"${{ vars.TEMP_CLIENT_ID }}","clientSecret":"$TEMP_SECRET","subscriptionId":"${{ vars.TEMP_SUBS_ID }}","tenantId":"${{ vars.TEMP_TENANT_ID }}"}'
+        creds: '{"clientId":"${{ vars.TEMP_CLIENT_ID }}","clientSecret":"${{ env.TEMP_SECRET }}","subscriptionId":"${{ vars.TEMP_SUBS_ID }}","tenantId":"${{ vars.TEMP_TENANT_ID }}"}'
 
     - name: Terraform Init
       id: init
@@ -92,7 +92,7 @@ jobs:
           -backend-config=subscription_id=${{ vars.TEMP_SUBS_ID }} \
           -backend-config=tenant_id=${{ vars.TEMP_TENANT_ID }} \
           -backend-config=client_id=${{ vars.TEMP_CLIENT_ID }} \
-          -backend-config=client_secret=$TEMP_SECRET
+          -backend-config=client_secret=${{ env.TEMP_SECRET }}
   
     # - name: Terraform Validate
     #   id: validate
