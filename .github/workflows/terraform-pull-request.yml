@@ -99,7 +99,7 @@ jobs:
     - name: Comment Pull Request
       id: comment
       env:
-          PLAN: "terraform\n${{ steps.plan.tf-plan.stdout }}"
+          PLAN: "${{ step.tf-plan.stdout }}"
       run: |
         echo "ENV: ${{ env.PLAN }}"
-        echo "${process.env.PLAN}"
+        
