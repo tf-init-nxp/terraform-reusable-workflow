@@ -132,7 +132,7 @@ jobs:
           <details><summary>Show Plan</summary>
     
           \`\`\`\n
-          ${{ steps.tf-plan.outputs.plan }}
+          ${process.env.PLAN}
           \`\`\`
     
           </details>
