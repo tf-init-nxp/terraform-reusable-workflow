@@ -99,7 +99,7 @@ jobs:
     - name: Comment Pull Request
       id: comment
       env:
-          PLAN: "${{ step.tf-plan.stdout }}"
+          PLAN: "${{ steps.tf-plan.stdout }}"
       run: |
         echo "ENV: ${{ env.PLAN }}"
         
