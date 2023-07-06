@@ -47,6 +47,7 @@ jobs:
       id: prep-vars
       run: |
         echo "TF_KEY_STATE=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
+        echo "GITHUB_REPO=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
@@ -87,9 +88,12 @@ jobs:
       run: |
         export exitcode=0
         
-        mkdir -p terraform-plan/${GITHUB_REPOSITORY#*/}
+        mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
 
-        terraform plan -detailed-exitcode -out terraform-plan/${GITHUB_REPOSITORY#*/}/${GITHUB_REPOSITORY#*/}-${{ env.BRANCH_NAME }}.tfplan || export exitcode=$?
+        ls -l
+        ls -l terraform-plan/
+
+        terraform plan -detailed-exitcode -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -102,8 +106,8 @@ jobs:
         fi
     - uses: actions/upload-artifact@master
       with:
-        name: ${GITHUB_REPOSITORY#*/}-${{ env.BRANCH_NAME }}.tfplan
-        path: terraform-plan/${GITHUB_REPOSITORY#*/}
+        name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
+        path: terraform-plan/${{ env.GITHUB_REPO }}
 
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
