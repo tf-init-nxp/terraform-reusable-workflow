@@ -97,7 +97,6 @@ jobs:
           echo Terraform Plan Failed!
           exit 1
         else
-          echo "plan=$(cat terraform-plan/${GITHUB_REPOSITORY#*/}/${GITHUB_REPOSITORY#*/}-${{ env.BRANCH_NAME }}.tfplan)"   >> $GITHUB_OUTPUT
           exit 0
 
         fi
