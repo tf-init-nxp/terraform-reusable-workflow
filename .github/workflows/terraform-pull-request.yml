@@ -101,9 +101,9 @@ jobs:
 
         fi
     - uses: actions/upload-artifact@master
-    with:
-      name: ${GITHUB_REPOSITORY#*/}-${{ env.BRANCH_NAME }}.tfplan
-      path: terraform-plan/${GITHUB_REPOSITORY#*/}
+      with:
+        name: ${GITHUB_REPOSITORY#*/}-${{ env.BRANCH_NAME }}.tfplan
+        path: terraform-plan/${GITHUB_REPOSITORY#*/}
 
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
