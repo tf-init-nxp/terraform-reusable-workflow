@@ -101,6 +101,7 @@ jobs:
           echo Terraform Plan Failed!
           exit 1
         else
+          echo "PLAN=${{ steps.plan.outputs.stdout }}" >> $GITHUB_OUTPUT
           exit 0
 
         fi
@@ -111,8 +112,8 @@ jobs:
 
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
-      env:
-        PLAN: "terraform\n${{ steps.tf-plan.outputs.stdout }}"
+      #env:
+      #  PLAN: "terraform\n${{ steps.tf-plan.outputs.stdout }}"
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -133,6 +134,7 @@ jobs:
     
           \`\`\`\n
           ${process.env.PLAN}
+          ${{ steps.tf-plan.outputs.stdout }}
           \`\`\`
     
           </details>
