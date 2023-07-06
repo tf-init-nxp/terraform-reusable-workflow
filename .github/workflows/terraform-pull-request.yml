@@ -87,16 +87,9 @@ jobs:
       id: tf-plan
       continue-on-error: true
       run: |
-        #export exitcode=0
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
-        terraform plan -detailed-exitcode -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
-        #|| export exitcode=$?
-        #if [ $exitcode -eq 1 ]; then
-        #  echo Terraform Plan Failed!
-        #  exit 1
-        #else
-        #  exit 0
-        #fi
+        terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
+    
     - uses: actions/upload-artifact@master
       with:
         name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
@@ -105,7 +98,7 @@ jobs:
     - uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
       env:
-        PLAN: ${{ steps.tf-plan.outputs.stdout }}
+        PLAN: "terraform\n${{ steps.tf-plan.outputs.stdout }}"
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -125,8 +118,8 @@ jobs:
     
           <details><summary>Show Plan</summary>
     
-          \`\`\`terraform\n
-          ${process.env.PLAN}
+          \`\`\`
+           ${process.env.PLAN}
           \`\`\`
     
           </details>
