@@ -90,28 +90,20 @@ jobs:
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
         terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
         terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
+        echo "PLAN=$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)"
 
     - name: Comment Pull Request
       id: comment
-      env:
-          PLAN: "${{ steps.tf-plan.stdout }}"
       run: |
-        echo "ENV: ${{ env.PLAN }}"
+        echo "PLAN: ${{ steps.tf-plan.outputs.PLAN }}"
 
     - uses: actions/upload-artifact@master
       with:
         name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
         path: terraform-plan/${{ env.GITHUB_REPO }}
 
-    - name: ValidatingContent
-      id: validatingcontent
-      run: |
-        cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
+        
 
-    - name: ValidatingContent2
-      id: validatingcontent2
-      run: |
-        cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
 
 
 
