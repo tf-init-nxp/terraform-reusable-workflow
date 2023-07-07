@@ -89,6 +89,7 @@ jobs:
       run: |
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
         terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
+        terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
 
     - name: Comment Pull Request
       id: comment
@@ -102,11 +103,10 @@ jobs:
         name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
         path: terraform-plan/${{ env.GITHUB_REPO }}
 
-    - name: PR comment with file
-      uses: thollander/actions-comment-pull-request@v2
-      with:
-        filePath: terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
-        comment_tag: terraform-plan
+    - name: ValidatingContent
+      id: validatingcontent
+      run: |
+        cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
 
 
 
