@@ -89,12 +89,6 @@ jobs:
       run: |
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
         terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
-    
-    - uses: actions/upload-artifact@master
-      with:
-        name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
-        path: terraform-plan/${{ env.GITHUB_REPO }}
-
 
     - name: Comment Pull Request
       id: comment
@@ -102,4 +96,12 @@ jobs:
           PLAN: "${{ steps.tf-plan.stdout }}"
       run: |
         echo "ENV: ${{ env.PLAN }}"
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
+        path: terraform-plan/${{ env.GITHUB_REPO }}
+
+
+
         
