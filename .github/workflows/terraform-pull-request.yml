@@ -108,6 +108,11 @@ jobs:
       run: |
         cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
 
+    - name: ValidatingContent2
+      id: validatingcontent2
+      run: |
+        cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
+
 
 
         
