@@ -106,7 +106,7 @@ jobs:
     - name: ValidatingContent
       id: validatingcontent
       run: |
-        cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
+        cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
 
 
 
