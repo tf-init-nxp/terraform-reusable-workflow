@@ -102,6 +102,14 @@ jobs:
         name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
         path: terraform-plan/${{ env.GITHUB_REPO }}
 
+    - name: PR comment with file
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+        filePath: terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
+      message: |
+        _(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_
+      comment_tag: terraform-plan
+
 
 
         
