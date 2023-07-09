@@ -102,6 +102,8 @@ jobs:
     - name: Comment Pull Request
       uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.tf-plan.outputs.PLAN }}"
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -122,7 +124,7 @@ jobs:
           <details><summary>Show Plan</summary>
     
           \`\`\`
-           ${{ steps.tf-plan.outputs.PLAN }}
+           ${process.env.PLAN}
           \`\`\`
     
           </details>
@@ -145,7 +147,7 @@ jobs:
               body: output
             })
           }
-          
+
     - uses: actions/upload-artifact@master
       with:
         name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
