@@ -117,7 +117,7 @@ jobs:
           })
           / 2. Prepare format of the comment
 
-          const output = "Hola";
+          const output = "Hola"
 
           if (botComment) {
             github.rest.issues.updateComment({
