@@ -88,10 +88,10 @@ jobs:
       continue-on-error: true
       run: |
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
-        terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
-        terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
+        #terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
         echo "PLAN<<EOF" >> $GITHUB_OUTPUT
-        echo "$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)">> $GITHUB_OUTPUT
+        #echo "$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)">> $GITHUB_OUTPUT
+        terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
         echo "EOF" >> $GITHUB_OUTPUT
 
     #- name: Comment Pull Request
