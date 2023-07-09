@@ -90,15 +90,17 @@ jobs:
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
         terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
         terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
-        cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt >> $GITHUB_OUTPUT
+        echo "PLAN<<EOF" >> $GITHUB_OUTPUT
+        echo "$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)">> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
 
     - name: Comment Pull Request
       id: comment
-      env:
-        PLAN: "terraform\n${{ steps.tf-plan.outputs.stdout }}"
+      #env:
+      #  PLAN: "terraform\n${{ steps.tf-plan.outputs.stdout }}"
       run: |
-        #echo ${{ steps.tf-plan.outputs.pr_body }}
-        echo ${process.env.PLAN}
+        echo ${{ steps.tf-plan.outputs.PLAN }}
+        #echo ${process.env.PLAN}
 
     - uses: actions/upload-artifact@master
       with:
