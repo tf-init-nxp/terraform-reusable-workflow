@@ -35,6 +35,7 @@ jobs:
     - name: Preparing Variables
       id: prep-vars
       run: |
+        echo "The target branch is: ${{ env.BRANCH_NAME }}"
         echo "TF_KEY_STATE=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         echo "GITHUB_REPO=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
