@@ -13,11 +13,6 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
-
-env:
-  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   
 jobs:
   terraform-pull-request:
@@ -25,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARM_SKIP_PROVIDER_REGISTRATION: true
-      TEMP_SECRET: ${{ secrets.TEMP_SECRET }}
     steps:
     - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v2
@@ -45,13 +39,13 @@ jobs:
         echo "GITHUB_REPO=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
-            echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
+            echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZ_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ vars.TF_STATE_SA_PROD }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_PROD }}" >> $GITHUB_ENV
             echo "TF_RG_NAME=${{ vars.TF_STATE_RG_PROD }}" >> $GITHUB_ENV
         else
             echo "working on Dev"
-            echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
+            echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZ_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ vars.TF_STATE_SA_DEV }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
             echo "TF_RG_NAME=${{ vars.TF_STATE_RG_DEV }}" >> $GITHUB_ENV
@@ -60,7 +54,7 @@ jobs:
       
     - uses: Azure/login@v1
       with:
-        creds: '{"clientId":"${{ vars.TEMP_CLIENT_ID }}","clientSecret":"${{ secrets.TEMP_SECRET }}","subscriptionId":"${{ vars.TEMP_SUBS_ID }}","tenantId":"${{ vars.TEMP_TENANT_ID }}"}'
+        creds: '{"clientId":"${{ secrets.AZ_CLIENT_ID }}","clientSecret":"${{ secrets.AZ_CLIENT_SECRET }}","subscriptionId":"${{ env.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZ_TENANT_ID }}"}'
 
     - name: Terraform Init
       id: tf-init
@@ -69,22 +63,20 @@ jobs:
           -backend-config=container_name=${{ env.TF_CONTAINER_NAME }} \
           -backend-config=resource_group_name=${{ env.TF_RG_NAME }} \
           -backend-config=key="${{ env.TF_KEY_STATE }}" \
-          -backend-config=subscription_id=${{ vars.TEMP_SUBS_ID }} \
-          -backend-config=tenant_id=${{ vars.TEMP_TENANT_ID }} \
-          -backend-config=client_id=${{ vars.TEMP_CLIENT_ID }} \
-          -backend-config=client_secret=${{ secrets.TEMP_SECRET }}
+          -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
+          -backend-config=tenant_id=${{ secrets.AZ_TENANT_ID }} \
+          -backend-config=client_id=${{ secrets.AZ_CLIENT_ID }} \
+          -backend-config=client_secret=${{ secrets.AZ_CLIENT_SECRET }}
   
     # - name: Terraform Validate
     #   id: validate
     #   run: terraform validate -no-color
 
-    - name: Terraform Plan
-      id: tf-plan
+    - name: Terraform Apply
+      id: tf-apply
       continue-on-error: true
       run: |
-        mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
-        terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
-        terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
-        echo "PLAN<<EOF" >> $GITHUB_OUTPUT
-        echo "$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)">> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
+        echo "Terraform Apply" 
+        # terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
+        
+
