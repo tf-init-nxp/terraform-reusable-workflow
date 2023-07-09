@@ -95,7 +95,7 @@ jobs:
     - name: Comment Pull Request
       id: comment
       run: |
-        echo "PLAN: ${{ steps.tf-plan.outputs.PLAN }}"
+        echo "PLAN: ${{ env.PLAN }}"
 
     - uses: actions/upload-artifact@master
       with:
