@@ -30,7 +30,7 @@ jobs:
       id: getting-branch
       run: |
         #echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
-        echo "BRANCH_NAME=${{ github.event.pull_request.base.ref }} >> "$GITHUB_ENV"  
+        echo "BRANCH_NAME=${{ github.event.pull_request.base.ref }}" >> "$GITHUB_ENV"  
         
         
     - name: Preparing Variables
