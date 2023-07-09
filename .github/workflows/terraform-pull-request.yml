@@ -115,6 +115,15 @@ jobs:
           const botComment = comments.find(comment => {
             return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
           })
+          const output = `#### Terraform Initialization ⚙️\`${{ steps.tf-init.outcome }}\`
+                         `#### Terraform Plan 🖌 🤖 📖  \`${{ steps.tf-plan.outcome }}\`
+    
+                          <details><summary>Show Plan</summary>
+                          \`\`\`
+                           ${process.env.PLAN}
+                          \`\`\`
+                         </details>;
+
           if (botComment) {
             github.rest.issues.updateComment({
               owner: context.repo.owner,
