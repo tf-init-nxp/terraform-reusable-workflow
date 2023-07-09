@@ -1,4 +1,4 @@
-name: 'Terraform Pull Request Task'
+name: 'Terraform Apply Task'
 
 on:
   workflow_call:
@@ -8,16 +8,16 @@ on:
         required: true
         type: string
 
-permissions:^
+permissions:
   id-token: write 
   contents: read
   pull-requests: write
   issues: write
 
-#env:
- # ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
- # ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
- # ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   
 jobs:
   terraform-pull-request:
@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARM_SKIP_PROVIDER_REGISTRATION: true
+      TEMP_SECRET: ${{ secrets.TEMP_SECRET }}
     steps:
     - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v2
@@ -59,7 +60,7 @@ jobs:
       
     - uses: Azure/login@v1
       with:
-        creds: '{"clientId":"${{ secrets.AZ_CLIENT_ID }}","clientSecret":"${{ secrets.AZ_CLIENT_SECRET }}","subscriptionId":"${{ env.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZ_TENANT_ID }}"}'
+        creds: '{"clientId":"${{ vars.TEMP_CLIENT_ID }}","clientSecret":"${{ secrets.TEMP_SECRET }}","subscriptionId":"${{ vars.TEMP_SUBS_ID }}","tenantId":"${{ vars.TEMP_TENANT_ID }}"}'
 
     - name: Terraform Init
       id: tf-init
@@ -68,10 +69,10 @@ jobs:
           -backend-config=container_name=${{ env.TF_CONTAINER_NAME }} \
           -backend-config=resource_group_name=${{ env.TF_RG_NAME }} \
           -backend-config=key="${{ env.TF_KEY_STATE }}" \
-          -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
-          -backend-config=tenant_id=${{ secrets.AZ_TENANT_ID }} \
-          -backend-config=client_id=${{ secrets.AZ_CLIENT_ID }} \
-          -backend-config=client_secret=${{ secrets.AZ_CLIENT_SECRET }}
+          -backend-config=subscription_id=${{ vars.TEMP_SUBS_ID }} \
+          -backend-config=tenant_id=${{ vars.TEMP_TENANT_ID }} \
+          -backend-config=client_id=${{ vars.TEMP_CLIENT_ID }} \
+          -backend-config=client_secret=${{ secrets.TEMP_SECRET }}
   
     # - name: Terraform Validate
     #   id: validate
@@ -87,67 +88,3 @@ jobs:
         echo "PLAN<<EOF" >> $GITHUB_OUTPUT
         echo "$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)">> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
-
-    #- name: Comment Pull Request
-    #  id: comment
-    #  run: |
-    #    echo ${{ steps.tf-plan.outputs.PLAN }}
-
-    - name: Comment Pull Request
-      uses: actions/github-script@v6
-      if: github.event_name == 'pull_request'
-      env:
-        PLAN: "${{ steps.tf-plan.outputs.PLAN }}"
-      with:
-        script: |
-          // 1. Retrieve existing bot comments for the PR
-          const { data: comments } = await github.rest.issues.listComments({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-          })
-          const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('Terraform Plan')
-          })
-          // 2. Prepare format of the comment
-
-          const output = `#### Terraform Plan 🖌 🤖 ⚙️ 📖  \`${{ steps.tf-plan.outcome }}\`
-
-          <details><summary>Show Plan</summary>
-
-          \`\`\`\n
-          ${process.env.PLAN}
-          \`\`\`
-
-          </details>
-
-          *Pusher: @${{ github.actor }}*`;
-
-          if (botComment) {
-            github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: botComment.id,
-              body: output
-            })
-          } else {
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-          }
-
-
-    - uses: actions/upload-artifact@master
-      with:
-        name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
-        path: terraform-plan/${{ env.GITHUB_REPO }}
-
-        
-
-
-
-
-        
