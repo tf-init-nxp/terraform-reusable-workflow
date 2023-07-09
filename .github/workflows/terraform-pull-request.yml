@@ -116,16 +116,8 @@ jobs:
             return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
           })
           / 2. Prepare format of the comment
-          const output = `#### Terraform Format and Style 🖌\`${{ steps.tf-init.outcome }}\`
-
-          #### Terraform Plan 📖\`${{ steps.tf-plan.outcome }}\`
-          <details><summary>Show Plan</summary>
-          \`\`\`\n
-          ${process.env.PLAN}
-          \`\`\`
-          </details>
-
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          
+          const output = ${process.env.PLAN};
 
           if (botComment) {
             github.rest.issues.updateComment({
