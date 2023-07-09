@@ -1,4 +1,4 @@
-name: 'Terraform Apply Task'
+name: 'Terraform Apply Tasks'
 
 on:
   workflow_call:
@@ -7,6 +7,16 @@ on:
         description: 'Terraform Version to be used'
         required: true
         type: string
+      apply:
+        description: Apply Terraform infraestructure
+        type: boolean
+        required: false
+        default: false
+      destroy:
+        description: Destroy Terraform infraestructure
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   id-token: write 
@@ -15,8 +25,8 @@ permissions:
   issues: write
   
 jobs:
-  terraform-pull-request:
-    name: 'Terraform Pull Request'
+  terraform-apply-tasks:
+    name: 'Terraform Apply Taska'
     runs-on: ubuntu-latest
     env:
       ARM_SKIP_PROVIDER_REGISTRATION: true
@@ -31,12 +41,12 @@ jobs:
       run: |
         echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
         
-        
     - name: Preparing Variables
       id: prep-vars
       run: |
         echo "TF_KEY_STATE=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         echo "GITHUB_REPO=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
+        echo "The target branch is: ${{ env.BRANCH_NAME }}"
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZ_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
@@ -72,11 +82,28 @@ jobs:
     #   id: validate
     #   run: terraform validate -no-color
 
-    - name: Terraform Apply
-      id: tf-apply
+    - name: Terraform Plan
+      id: tf-plan
+      if: ${{ ! github.event.inputs.destroy }}
       continue-on-error: true
       run: |
-        echo "Terraform Apply" 
-        # terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
+        mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
+        terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
+        terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
+        echo "PLAN<<EOF" >> $GITHUB_OUTPUT
+        echo "$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)">> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
         
+    - name: Terraform Apply
+      id: tf-apply
+      if: |
+        ${{ github.event.inputs.apply }} && ${{ ! github.event.inputs.destroy }}
+      run: |
+        echo "terraform apply -auto-approve  -input=false terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan"
 
+
+    - name: Terraform Destroy
+      id: tf-destroy
+      if: ${{ github.event.inputs.destroy }} && ${{ ! github.event.inputs.apply }}
+      run: |
+        echo "terraform destroy -auto-approve "

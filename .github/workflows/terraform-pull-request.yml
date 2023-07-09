@@ -131,10 +131,6 @@ jobs:
             })
           }
 
-    - uses: actions/upload-artifact@master
-      with:
-        name: ${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
-        path: terraform-plan/${{ env.GITHUB_REPO }}
 
         
 
