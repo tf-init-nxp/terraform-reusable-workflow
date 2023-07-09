@@ -90,7 +90,7 @@ jobs:
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
         terraform plan -no-color -out terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan 
         terraform show -no-color terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan  > terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt
-        echo "PLAN=$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)"
+        echo "PLAN=$(cat terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.txt)" >> $GITHUB_ENV
 
     - name: Comment Pull Request
       id: comment
