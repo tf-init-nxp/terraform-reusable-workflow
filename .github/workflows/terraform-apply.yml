@@ -96,7 +96,7 @@ jobs:
         
     - name: Terraform Apply
       id: tf-apply
-      if: ${{ github.event.inputs.apply == 'true' && ${{ github.event.inputs.destroy }} != 'yes'}}
+      if: ${{ github.event.inputs.apply == 'true' && github.event.inputs.destroy != 'yes'}}
       run: |
         echo "terraform apply -auto-approve  -input=false terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan"
         echo "github.event.inputs.apply: ${{ github.event.inputs.apply }}"
