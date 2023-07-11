@@ -84,7 +84,7 @@ jobs:
 
     - name: Terraform Plan
       id: tf-plan
-      if: ${{ ! github.event.inputs.destroy }}
+      #if: ${{ ! github.event.inputs.destroy }}
       continue-on-error: true
       run: |
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
@@ -96,14 +96,13 @@ jobs:
         
     - name: Terraform Apply
       id: tf-apply
-      if: |
-        ${{ github.event.inputs.apply }}
+      if: ${{ ! github.event.inputs.destroy }}
       run: |
         echo "terraform apply -auto-approve  -input=false terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan"
 
 
     - name: Terraform Destroy
       id: tf-destroy
-      if: ${{ github.event.inputs.destroy }}
+      if: if: ${{ ! github.event.inputs.apply }}
       run: |
         echo "terraform destroy -auto-approve "
