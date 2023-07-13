@@ -1,4 +1,4 @@
-name: 'Terraform Apply/Destroy Tasks'
+name: 'Terraform Apply Tasks'
 
 on:
   workflow_call:
@@ -78,13 +78,13 @@ jobs:
           -backend-config=client_id=${{ secrets.AZ_CLIENT_ID }} \
           -backend-config=client_secret=${{ secrets.AZ_CLIENT_SECRET }}
   
-     - name: Terraform Validate
-       id: validate
-       run: terraform validate -no-color
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
 
     - name: Terraform Plan
       id: tf-plan
-      if: ${{ && github.event.inputs.apply == 'true' }}
+      if: ${{ github.event.inputs.apply == 'true' }}
       continue-on-error: true
       run: |
         mkdir -p terraform-plan/${{ env.GITHUB_REPO }}
@@ -99,6 +99,7 @@ jobs:
       if: ${{ github.event.inputs.apply == 'true' && github.event.inputs.destroy != 'yes' }}
       run: |
         terraform apply -auto-approve  -input=false terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
+
 
     - name: Terraform Destroy
       id: tf-destroy
