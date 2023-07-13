@@ -109,4 +109,4 @@ jobs:
       id: tf-destroy
       if: ${{ github.event.inputs.destroy == 'yes' && github.event.inputs.apply != 'true' }}
       run: |
-        echo "terraform destroy -auto-approve "
+        terraform destroy -auto-approve
