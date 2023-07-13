@@ -64,10 +64,12 @@ jobs:
       shell: bash
       
     - uses: Azure/login@v1
+      if: ${{ env.BRANCH_NAME }} == 'main'
       with:
         creds: '{"clientId":"${{ secrets.AZ_CLIENT_ID }}","clientSecret":"${{ secrets.AZ_CLIENT_SECRET }}","subscriptionId":"${{ env.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZ_TENANT_ID }}"}'
 
     - name: Terraform Init
+      if: ${{ env.BRANCH_NAME }} == 'main'
       id: tf-init
       run: |
         terraform init -backend-config=storage_account_name=${{ env.TF_STATE_SA }} \
@@ -84,6 +86,7 @@ jobs:
     #   run: terraform validate -no-color
 
     - name: Terraform Plan
+      if: ${{ env.BRANCH_NAME }} == 'main'
       id: tf-plan
       #if: ${{ ! github.event.inputs.destroy }}
       continue-on-error: true
@@ -97,13 +100,13 @@ jobs:
         
     - name: Terraform Apply
       id: tf-apply
-      if: ${{ github.event.inputs.apply == 'true' && github.event.inputs.destroy != 'yes'}}
+      if: ${{ github.event.inputs.apply == 'true' && github.event.inputs.destroy != 'yes' && env.BRANCH_NAME == 'main' }}
       run: |
         terraform apply -auto-approve  -input=false terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
 
 
     - name: Terraform Destroy
       id: tf-destroy
-      if: ${{ github.event.inputs.destroy == 'yes' && github.event.inputs.apply != 'true'}}
+      if: ${{ github.event.inputs.destroy == 'yes' && github.event.inputs.apply != 'true' && env.BRANCH_NAME == 'main' }}
       run: |
         echo "terraform destroy -auto-approve "
