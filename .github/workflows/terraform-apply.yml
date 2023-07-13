@@ -42,6 +42,7 @@ jobs:
         echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
         
     - name: Preparing Variables
+      if: ${{ env.BRANCH_NAME }} == 'main'
       id: prep-vars
       run: |
         echo "TF_KEY_STATE=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
