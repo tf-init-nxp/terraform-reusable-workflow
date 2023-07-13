@@ -100,13 +100,13 @@ jobs:
         
     - name: Terraform Apply
       id: tf-apply
-      if: ${{ github.event.inputs.apply == 'true' && github.event.inputs.destroy != 'yes' && env.BRANCH_NAME == "main" }}
+      if: ${{ github.event.inputs.apply == 'true' && github.event.inputs.destroy != 'yes' }}
       run: |
         terraform apply -auto-approve  -input=false terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
 
 
     - name: Terraform Destroy
       id: tf-destroy
-      if: ${{ github.event.inputs.destroy == 'yes' && github.event.inputs.apply != 'true' && env.BRANCH_NAME == "main" }}
+      if: ${{ github.event.inputs.destroy == 'yes' && github.event.inputs.apply != 'true' }}
       run: |
         echo "terraform destroy -auto-approve "
