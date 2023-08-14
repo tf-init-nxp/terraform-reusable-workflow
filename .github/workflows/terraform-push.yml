@@ -57,10 +57,11 @@ jobs:
       id: checkov
       uses: bridgecrewio/checkov-action@v12.2401.0
       with: 
-        framework: terraform
-        output_format: cli #,sarif
-        download_external_modules: true
-        soft_fail: true
+        config_file: .checkov.yml
+        #framework: terraform
+        #output_format: cli #,sarif
+        #download_external_modules: true
+        #soft_fail: true
         #output_file_path: console,results.sarif
         #download_external_modules: true
 
