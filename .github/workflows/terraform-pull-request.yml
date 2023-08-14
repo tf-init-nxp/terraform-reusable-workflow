@@ -40,6 +40,8 @@ jobs:
         echo "TF_KEY_STATE=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         echo "GITHUB_REPO=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         echo "AZ_TENANT_ID: ${{ vars.AZ_TENANT_ID }}"
+
+        echo "TF_CONTAINER_NAME_PROD ${{ vars.TF_CONTAINER_NAME_PROD }}"
         
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
