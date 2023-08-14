@@ -39,7 +39,6 @@ jobs:
         echo "The target branch is: ${{ env.BRANCH_NAME }}"
         echo "TF_KEY_STATE=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
         echo "GITHUB_REPO=${GITHUB_REPOSITORY#*/}" >> "$GITHUB_ENV"
-        echo ${{secrets.AZ_CLIENT_ID}} | sed 's/./& /g'
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZ_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
