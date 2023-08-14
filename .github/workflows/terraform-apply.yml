@@ -12,11 +12,6 @@ on:
         type: boolean
         required: false
         default: false
-      destroy:
-        description: Destroy Terraform infraestructure
-        type: string
-        required: false
-        default: no
 
 permissions:
   id-token: write 
@@ -50,7 +45,7 @@ jobs:
         
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
-            echo "TF_VAR_environment=prod" >> $GITHUB_ENV
+            echo "TF_VAR_environment=prd" >> $GITHUB_ENV
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZ_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ vars.TF_STATE_SA_PROD }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_PROD }}" >> $GITHUB_ENV
@@ -101,13 +96,13 @@ jobs:
         
     - name: Terraform Apply
       id: tf-apply
-      if: ${{ github.event.inputs.apply == 'true' && github.event.inputs.destroy != 'yes' }}
+      if: ${{ github.event.inputs.apply == 'true' }}
       run: |
         terraform apply -auto-approve  -input=false terraform-plan/${{ env.GITHUB_REPO }}/${{ env.GITHUB_REPO }}-${{ env.BRANCH_NAME }}.tfplan
 
 
     - name: Terraform Destroy
       id: tf-destroy
-      if: ${{ github.event.inputs.destroy == 'yes' && github.event.inputs.apply != 'true' }}
+      if: ${{ github.event.inputs.destroy == 'yes' }}
       run: |
         terraform destroy -auto-approve
