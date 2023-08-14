@@ -16,7 +16,7 @@ on:
         description: Destroy Terraform infraestructure
         type: string
         required: true
-        default: no
+        default: 'no'
 
 permissions:
   id-token: write 
