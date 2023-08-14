@@ -87,6 +87,6 @@ jobs:
 
     - name: Terraform Destroy
       id: tf-destroy
-      if: ${{ github.event.inputs.answer == 'yes' && github.event.inputs.destroy != 'true' }}
+      if: ${{ github.event.inputs.answer == 'yes' && github.event.inputs.destroy == 'true' }}
       run: |
         terraform destroy -auto-approve
