@@ -70,7 +70,7 @@ jobs:
     - name: Terraform Init
       id: tf-init
       run: |
-        terraform init -backend-config=storage_account_name=${{ env.TF_STATE_SA }} \
+        terraform init -backend-config=storage_account_name="${{ env.TF_STATE_SA }}xxx" \
           -backend-config=container_name=${{ env.TF_CONTAINER_NAME }} \
           -backend-config=resource_group_name=${{ env.TF_RG_NAME }} \
           -backend-config=key=${{ env.TF_KEY_STATE }} \
