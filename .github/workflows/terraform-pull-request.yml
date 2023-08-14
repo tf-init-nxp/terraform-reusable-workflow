@@ -42,6 +42,9 @@ jobs:
         echo "AZ_TENANT_ID: ${{ vars.AZ_TENANT_ID }}"
         echo "TF_STATE_SA=${{ vars.TF_STATE_SA_DEV }}"
         
+        echo "LCOAL_VAR=${{ vars.local_var }}"
+        echo "LOCAL_SECRET=${{ vars.local_secret }}"
+        
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
             echo "ARM_SUBSCRIPTION_ID=${{ vars.AZ_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
