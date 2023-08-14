@@ -8,11 +8,11 @@ on:
         required: true
         type: string
 
-permissions:
-  id-token: write 
-  contents: read
-  pull-requests: write
-  issues: write
+permissions: write-all
+  #id-token: write 
+  #contents: read
+  #pull-requests: write
+  #issues: write
   
 jobs:
   terraform-pull-request:
