@@ -50,12 +50,14 @@ jobs:
         
         if [ "${{ env.BRANCH_NAME }}" = "main" ]; then
             echo "working on Prod"
+            echo "TF_VAR_environment=prod" >> $GITHUB_ENV
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZ_SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ vars.TF_STATE_SA_PROD }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_PROD }}" >> $GITHUB_ENV
             echo "TF_RG_NAME=${{ vars.TF_STATE_RG_PROD }}" >> $GITHUB_ENV
         else
             echo "working on Dev"
+            echo "TF_VAR_environment=dev" >> $GITHUB_ENV
             echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZ_SUBSCRIPTION_ID_DEV }}" >> $GITHUB_ENV
             echo "TF_STATE_SA=${{ vars.TF_STATE_SA_DEV }}" >> $GITHUB_ENV
             echo "TF_CONTAINER_NAME=${{ vars.TF_CONTAINER_NAME_DEV }}" >> "$GITHUB_ENV"
